@@ -1,0 +1,44 @@
+.editor {
+  border: 1px dotted #a5a5a5;
+  
+  .editor-top {
+    height: 50px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .editor-text {
+    white-space: pre-wrap;
+    width: 100%;
+    min-width: 500px;
+    min-height: 300px;
+    padding: 10px;
+    font-size: 1.2em;
+    display: inline-block;
+    font-family: monospace;
+  }
+}
+
+.editor-toolbar {
+  list-style-type: none;
+  height: 50px;
+  margin: 0;
+  padding: 10px 5px;
+  line-height: 30px;
+
+  li {
+    display: inline-block;
+    float: left;
+    color: #a5a5a5;
+    font-size: 14px;
+    font-weight: 100;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 0px 5px;
+    margin-right: 5px;
+
+    &:hover {
+      text-decoration: underline;
+      border-color: #a5a5a5;
+    }
+  }
+}

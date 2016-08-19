@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Elm Editor</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/main.css" rel="stylesheet" />
+  </head>
+  <body>
+    <script src="elm.js"></script>
+    <script>
+     var app = Elm.Main.fullscreen();
+
+     app.ports.checkSelection.subscribe(function (targetId) {
+       var selObj = document.getSelection();
+       var selStr = selObj.toString();
+       // console.log(selObj);       
+       if (selObj.anchorNode.parentNode.id === targetId &&
+           selObj.focusNode.parentNode.id === targetId) {
+         app.ports.getSelected.send({
+           text: selObj.toString(),
+           start: selObj.anchorOffset,
+           end: selObj.focusOffset
+         });
+       }
+     })
+
+     app.ports.moveCursor.subscribe(function (inputs) {
+       var inNode = inputs[0];
+       var toPosition = parseInt(inputs[1]);
+       var el = document.getElementById(inNode);
+       var range = document.createRange();
+       var sel = document.getSelection();
+       range.setStart(el.childNodes[0], toPosition);
+       range.collapse(true);
+       sel.removeAllRanges();
+       sel.addRange(range);
+     });
+     
+    </script>
+  </body>
+</html>
