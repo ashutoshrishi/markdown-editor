@@ -23,7 +23,7 @@ type alias Model =
 
 init : (Model, Cmd Msg)
 init =
-  let (editorInit, em) = Editor.init
+  let (editorInit, em) = Editor.init "editor-area"
   in ( Model editorInit
      , Cmd.map EditorMsg em 
      )

@@ -13808,8 +13808,8 @@ var _user$project$Component_Editor$withCursorLine = F3(
 		} else {
 			var _p2 = _p0._1;
 			var _p1 = _p0._0;
-			var len = _elm_lang$core$String$length(_p1);
-			return (_elm_lang$core$Native_Utils.cmp(len, cursor) < 0) ? A2(
+			var len = _elm_lang$core$String$length(_p1) + 1;
+			return (_elm_lang$core$Native_Utils.cmp(len, cursor) < 1) ? A2(
 				_elm_lang$core$List_ops['::'],
 				_p1,
 				A3(_user$project$Component_Editor$withCursorLine, cursor - len, _p2, transform)) : A2(
@@ -13824,7 +13824,7 @@ var _user$project$Component_Editor$makeHeading = function (_p3) {
 	var transformed = A3(
 		_user$project$Component_Editor$withCursorLine,
 		_p4.selected.start,
-		lines,
+		A2(_elm_lang$core$Debug$log, 'Lines', lines),
 		F2(
 			function (x, y) {
 				return A2(_elm_lang$core$Basics_ops['++'], x, y);
@@ -13922,17 +13922,19 @@ var _user$project$Component_Editor$getSelected = _elm_lang$core$Native_Platform.
 		}));
 var _user$project$Component_Editor$Model = F3(
 	function (a, b, c) {
-		return {content: a, representation: b, selected: c};
+		return {content: a, selected: b, domId: c};
 	});
 var _user$project$Component_Editor$Selection = F3(
 	function (a, b, c) {
 		return {text: a, start: b, end: c};
 	});
 var _user$project$Component_Editor$defaultSelection = A3(_user$project$Component_Editor$Selection, '', 0, 0);
-var _user$project$Component_Editor$init = {
-	ctor: '_Tuple2',
-	_0: A3(_user$project$Component_Editor$Model, '', '', _user$project$Component_Editor$defaultSelection),
-	_1: _elm_lang$core$Platform_Cmd$none
+var _user$project$Component_Editor$init = function (id) {
+	return {
+		ctor: '_Tuple2',
+		_0: A3(_user$project$Component_Editor$Model, '', _user$project$Component_Editor$defaultSelection, id),
+		_1: _elm_lang$core$Platform_Cmd$none
+	};
 };
 var _user$project$Component_Editor$selectionWrap = F2(
 	function (wrap, model) {
@@ -13957,14 +13959,14 @@ var _user$project$Component_Editor$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{content: _p6, representation: formatted}),
+						{content: _p6}),
 					_1: _user$project$Component_Editor$checkSelection('editor-area')
 				};
 			case 'CheckSelection':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _user$project$Component_Editor$checkSelection('editor-area')
+					_1: _user$project$Component_Editor$checkSelection(model.domId)
 				};
 			case 'Bold':
 				return {
@@ -13993,7 +13995,7 @@ var _user$project$Component_Editor$update = F2(
 					ctor: '_Tuple2',
 					_0: _user$project$Component_Editor$makeHeading(model),
 					_1: _user$project$Component_Editor$moveCursor(
-						{ctor: '_Tuple2', _0: 'editor-area', _1: model.selected.start})
+						{ctor: '_Tuple2', _0: model.domId, _1: model.selected.start})
 				};
 		}
 	});
@@ -14026,7 +14028,6 @@ var _user$project$Component_Editor$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$keyboard$Keyboard$downs(check),
 				_user$project$Component_Editor$getSelected(_user$project$Component_Editor$Selected)
 			]));
 };
@@ -14062,11 +14063,7 @@ var _user$project$Component_Editor$editorView = function (model) {
 						A2(
 						_elm_lang$html$Html_Events$on,
 						'input',
-						A2(_elm_lang$core$Json_Decode$map, _user$project$Component_Editor$Edited, _user$project$Component_Editor$innerHtmlDecoder)),
-						A2(
-						_elm_lang$html$Html_Attributes$property,
-						'innerHTML',
-						_elm_lang$core$Json_Encode$string(model.content))
+						A2(_elm_lang$core$Json_Decode$map, _user$project$Component_Editor$Edited, _user$project$Component_Editor$innerHtmlDecoder))
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
@@ -14110,7 +14107,7 @@ var _user$project$Main$EditorMsg = function (a) {
 	return {ctor: 'EditorMsg', _0: a};
 };
 var _user$project$Main$init = function () {
-	var _p0 = _user$project$Component_Editor$init;
+	var _p0 = _user$project$Component_Editor$init('editor-area');
 	var editorInit = _p0._0;
 	var em = _p0._1;
 	return {

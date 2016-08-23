@@ -12,7 +12,7 @@
      app.ports.checkSelection.subscribe(function (targetId) {
        var selObj = document.getSelection();
        var selStr = selObj.toString();
-       // console.log(selObj);       
+       /* console.log(selObj);       */
        if (selObj.anchorNode.parentNode.id === targetId &&
            selObj.focusNode.parentNode.id === targetId) {
          app.ports.getSelected.send({
